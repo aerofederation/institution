@@ -1,0 +1,617 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* ==========================================================================
+   AFI DESIGN SYSTEM
+
+   One visual language across two environments:
+
+     PUBLIC  · light, institutional, spacious — a national body presenting itself
+     HQ      · dark, operational, dense — an intelligence surface
+
+   They share typography, spacing, radii, iconography and brand hues. Only
+   surface luminance and information density change, which is what makes the
+   command centre read as the same product rather than a second application.
+
+   Palette: deep navy for authority, with the federation's orange as the
+   working primary. The navy ground is what lets the orange carry; blue is kept
+   only for `--info`, where a colour distinct from the brand is worth having.
+   ========================================================================== */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* AFI brand ramp — referenced directly for bespoke surfaces (hero, HQ
+     chrome) where a semantic token would be the wrong abstraction. */
+  --color-navy-50: oklch(0.97 0.008 250);
+  --color-navy-100: oklch(0.93 0.016 250);
+  --color-navy-200: oklch(0.86 0.028 251);
+  --color-navy-300: oklch(0.74 0.042 252);
+  --color-navy-400: oklch(0.6 0.056 253);
+  --color-navy-500: oklch(0.48 0.066 254);
+  --color-navy-600: oklch(0.39 0.064 255);
+  --color-navy-700: oklch(0.31 0.056 256);
+  --color-navy-800: #043353;
+  --color-navy-900: #0b2138;
+  --color-navy-950: #02243d;
+
+  /*
+   * The brand accent, on the orange of the home page.
+   *
+   * Lightness steps are unchanged from the blue scale this replaced, so every
+   * existing usage keeps the contrast it was designed with — only the hue
+   * moved. 300 is the amber that has always been on the marketing page; the
+   * darker steps are the same colour taken down far enough to carry white text
+   * and to be readable as text on a white ground, which an amber at 0.78
+   * lightness cannot do (2.05:1 against white).
+   */
+  /*
+   * Taken from aerofederation.org, not derived. #ff671f is the organisation's
+   * orange and #043353 its navy; the steps between are the site's own
+   * orange-soft and orange-deep, plus two darker stops this platform needs and
+   * a marketing site does not.
+   *
+   * #ff671f is a display colour: 2.91:1 on white, which is fine for a headline
+   * on navy (4.5:1 there) and unusable for a button label or a link. So 600 and
+   * 700 exist — #cc4a0e carries white text at 4.61:1 — and `--primary` uses
+   * those on light surfaces while the true brand orange leads on dark ones.
+   */
+  --color-aero-300: #ff8b4f;
+  --color-aero-400: #ff671f;
+  --color-aero-500: #d9500f;
+  --color-aero-600: #cc4a0e;
+  --color-aero-700: #b83f0a;
+
+  --color-amber-accent: #ff671f;
+  --color-amber-accent-strong: #d9500f;
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-3xl: calc(var(--radius) * 2.6);
+
+  /* Section rhythm. Public pages breathe; HQ pages stay tight. */
+  --spacing-section: 6rem;
+  --spacing-section-lg: 8.5rem;
+}
+
+/* ── Public / light ─────────────────────────────────────────────────────── */
+:root {
+  --background: oklch(0.995 0.002 250);
+  --foreground: oklch(0.19 0.036 258);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.19 0.036 258);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.19 0.036 258);
+
+  /* #cc4a0e — 4.61:1 with white on it. The brand orange itself is 2.91:1. */
+  --primary: #cc4a0e;
+  --primary-foreground: oklch(0.99 0.004 250);
+
+  --secondary: oklch(0.96 0.008 250);
+  --secondary-foreground: oklch(0.24 0.045 257);
+
+  --muted: oklch(0.965 0.006 250);
+  --muted-foreground: oklch(0.5 0.022 254);
+
+  /* A warm tint now, so hover and selected states sit under the brand. */
+  --accent: oklch(0.96 0.018 70);
+  --accent-foreground: oklch(0.24 0.045 257);
+
+  --destructive: oklch(0.55 0.2 25);
+  --success: oklch(0.55 0.13 155);
+  /*
+   * Moved off 66 to a yellower 92. It used to sit on the same hue the brand now
+   * occupies, which would have made "needs attention" and "this is a button"
+   * the same colour.
+   */
+  --warning: oklch(0.75 0.15 92);
+  --info: oklch(0.58 0.16 248);
+
+  --border: oklch(0.9 0.01 250);
+  --input: oklch(0.9 0.01 250);
+  --ring: #d9500f;
+
+  /* Categorical ramp: aerospace blue → navy → amber. Ordered so adjacent
+     series stay distinguishable in greyscale as well as in colour. */
+  --chart-1: #cc4a0e;
+  --chart-2: #ff8b4f;
+  --chart-3: oklch(0.31 0.056 256);
+  --chart-4: oklch(0.58 0.16 248);
+  --chart-5: oklch(0.6 0.09 200);
+
+  --radius: 0.5rem;
+
+  --sidebar: oklch(0.985 0.004 250);
+  --sidebar-foreground: oklch(0.19 0.036 258);
+  --sidebar-primary: oklch(0.42 0.14 252);
+  --sidebar-primary-foreground: oklch(0.99 0.004 250);
+  --sidebar-accent: oklch(0.95 0.018 250);
+  --sidebar-accent-foreground: oklch(0.24 0.045 257);
+  --sidebar-border: oklch(0.9 0.01 250);
+  --sidebar-ring: oklch(0.58 0.16 248);
+}
+
+/* ── HQ / dark ──────────────────────────────────────────────────────────── */
+.dark {
+  --background: oklch(0.145 0.028 259);
+  --foreground: oklch(0.95 0.008 250);
+
+  --card: oklch(0.185 0.032 258);
+  --card-foreground: oklch(0.95 0.008 250);
+  --popover: oklch(0.2 0.034 258);
+  --popover-foreground: oklch(0.95 0.008 250);
+
+  /*
+   * On the dark ground this is the marketing page's own amber, unmodified —
+   * against navy it has the contrast the light theme had to go darker to find.
+   */
+  --primary: oklch(0.78 0.14 72);
+  --primary-foreground: oklch(0.14 0.028 259);
+
+  --secondary: oklch(0.24 0.04 257);
+  --secondary-foreground: oklch(0.95 0.008 250);
+
+  --muted: oklch(0.23 0.036 257);
+  --muted-foreground: oklch(0.68 0.024 252);
+
+  --accent: oklch(0.28 0.05 62);
+  --accent-foreground: oklch(0.95 0.008 250);
+
+  --destructive: oklch(0.68 0.19 22);
+  --success: oklch(0.72 0.15 158);
+  --warning: oklch(0.82 0.15 92);
+  --info: oklch(0.68 0.14 246);
+
+  --border: oklch(0.98 0.01 250 / 12%);
+  --input: oklch(0.98 0.01 250 / 16%);
+  --ring: #ff671f;
+
+  --chart-1: #ff671f;
+  --chart-2: #ff8b4f;
+  --chart-3: oklch(0.6 0.056 253);
+  --chart-4: oklch(0.68 0.14 246);
+  --chart-5: oklch(0.7 0.1 195);
+
+  --sidebar: oklch(0.165 0.03 259);
+  --sidebar-foreground: oklch(0.9 0.012 250);
+  --sidebar-primary: #ff671f;
+  --sidebar-primary-foreground: oklch(0.14 0.028 259);
+  --sidebar-accent: oklch(0.25 0.045 60);
+  --sidebar-accent-foreground: oklch(0.95 0.008 250);
+  --sidebar-border: oklch(0.98 0.01 250 / 10%);
+  --sidebar-ring: #ff671f;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings:
+      'cv02' 1,
+      'cv03' 1,
+      'ss01' 1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading tracking-tight;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* A visible, branded focus ring everywhere — keyboard users get the same
+     quality of affordance as pointer users. */
+  :focus-visible {
+    @apply ring-ring ring-offset-background rounded-sm ring-2 ring-offset-2 outline-none;
+  }
+
+  ::selection {
+    background: var(--color-aero-500);
+    color: white;
+  }
+}
+
+@layer components {
+  /* ── Aerospace surface treatments ─────────────────────────────────────────
+     Applied to specific sections, never to whole pages. The brief is explicit
+     that decoration must stay subtle; each of these is a low-contrast texture
+     that reads as precision rather than ornament. */
+
+  /*
+   * There is no background grid utility here, and none should be added.
+   *
+   * A ruled grid behind content is a standing no for this product. Grounds are
+   * plain, or a soft wash — never a drawing-sheet pattern. `.afi-grid` and
+   * `.afi-grid-fine` used to live here and were removed along with the nine
+   * overlays that used them.
+   */
+
+  /* Fades a texture out toward the edges so it never fights the content. */
+  .afi-fade-edges {
+    mask-image: radial-gradient(ellipse 75% 65% at 50% 40%, black 35%, transparent 100%);
+  }
+
+  .afi-fade-bottom {
+    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  }
+
+  /* Hairline separator with a bright centre — a horizon line. */
+  .afi-hairline {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      color-mix(in oklch, var(--color-aero-500) 45%, transparent),
+      transparent
+    );
+  }
+
+  .afi-eyebrow {
+    @apply text-muted-foreground font-mono text-[11px] font-medium tracking-[0.18em] uppercase;
+  }
+
+  /* Numeric readouts: tabular so digits do not jitter as values update. */
+  .afi-metric {
+    @apply font-mono tabular-nums;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  .afi-orbit {
+    animation: afi-orbit 26s linear infinite;
+  }
+
+  .afi-drift {
+    animation: afi-drift 9s ease-in-out infinite;
+  }
+
+  .afi-pulse-node {
+    animation: afi-pulse-node 3.2s ease-in-out infinite;
+  }
+
+  .afi-trace {
+    stroke-dasharray: 6 10;
+    animation: afi-trace 2.4s linear infinite;
+  }
+
+  .afi-sweep {
+    animation: afi-sweep 7s ease-in-out infinite;
+  }
+}
+
+@keyframes afi-orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes afi-drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes afi-pulse-node {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+}
+
+@keyframes afi-trace {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+
+@keyframes afi-sweep {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: translateX(-12%);
+  }
+  50% {
+    opacity: 0.4;
+    transform: translateX(12%);
+  }
+}
+
+/*
+ * Honour the operating-system preference globally.
+ *
+ * Framer Motion components read the same preference through `useReducedMotion`,
+ * but CSS animations need this backstop — otherwise a decorative orbit keeps
+ * spinning for someone who has explicitly asked it not to.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .afi-orbit,
+  .afi-drift,
+  .afi-pulse-node,
+  .afi-trace,
+  .afi-sweep {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================================
+   Motion — the masked type reveal from aerofederation.org.
+
+   The mask is CSS; the transform is GSAP (`components/motion/split-text.tsx`).
+   Splitting it this way means the text is laid out correctly before any script
+   runs, so a heading never reflows when the animation initialises.
+   ========================================================================== */
+
+.afi-split-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  /* Descenders would otherwise be clipped by the mask. */
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+
+.afi-split-mask > [data-unit] {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Line mode stacks its masks; the outer span carries the line spacing. */
+.afi-split-lines > span,
+.afi-split-lines .afi-split-mask {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /*
+   * Nothing is hidden when motion is off. The mask stops clipping and the
+   * transform is dropped, so the heading is simply present.
+   */
+  .afi-split-mask {
+    overflow: visible;
+  }
+  .afi-split-mask > [data-unit] {
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   Icon motion.
+
+   Two rules, on the card rather than the icon, so the whole tile responds to a
+   hover anywhere on the card — not only when the pointer finds the 20px glyph.
+
+   Kept small on purpose. A page carries twenty of these; anything larger reads
+   as noise rather than as feedback.
+   ========================================================================== */
+
+.afi-icon-tile {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.afi-icon-glyph {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:is(a, button, .group, [class*='hover\:border']):hover > .afi-icon-tile,
+.afi-icon-tile:hover {
+  transform: translateY(-2px);
+}
+
+:is(a, button, .group, [class*='hover\:border']):hover .afi-icon-glyph,
+.afi-icon-tile:hover .afi-icon-glyph {
+  transform: rotate(-6deg) scale(1.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .afi-icon-tile,
+  .afi-icon-glyph {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   The official AFI lockup — emblem plus bilingual wordmark.
+
+   The emblem box is pinned here rather than by next/image's width/height
+   props. Those are presentational hints that any class beats, and the source
+   is a 12142px square master: if the optimizer ever serves the master instead
+   of a resized copy, an unpinned emblem renders at full size and takes over
+   the page. Sizing it here makes the rendered box independent of what the
+   server returns.
+   ========================================================================== */
+
+.afi-emblem {
+  display: block;
+  flex: none;
+  width: var(--afi-emblem-size, 38px);
+  height: var(--afi-emblem-size, 38px);
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+/* ---------------------------------------------------------------------------
+   The two wordmark lines are set to the SAME LENGTH, as the organisation's own
+   lockup does.
+
+   Measured rather than eyeballed: the Devanagari run grows 8.50px of width per
+   px of font-size, and the letter-spaced English run grows 16.99px — almost
+   exactly double. So one variable drives both and the Hindi is set at twice
+   it. Change --afi-en-size alone and the two lines stay the same width.
+   --------------------------------------------------------------------------- */
+
+.afi-lockup {
+  --afi-en-size: 9.5px;
+}
+
+.afi-lockup-hi {
+  font-family: var(--font-devanagari), 'Noto Sans Devanagari', sans-serif;
+  font-weight: 600;
+  font-size: calc(var(--afi-en-size) * 2);
+  line-height: 1.15;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.afi-lockup-en {
+  font-weight: 700;
+  font-size: var(--afi-en-size);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Footer — matched to aerofederation.org's own footer card.
+
+   Written against the `.afi-footer*` hooks already in the markup rather than
+   as utility classes on each element, for two reasons: the values below are
+   the main site's exact numbers and belong in one place where they can be
+   compared against it, and this file is unlayered, so it wins over Tailwind's
+   `@layer utilities` without needing `!important` or a rewrite of the markup.
+
+   Values taken from styles/globals.css and styles/footer.css on the main site:
+     ground      #043353  (--navy, not the deeper --navy-deep)
+     body text   #b9cddd
+     headings    #ff8b4f  (--orange-soft) · 11px · 0.18em · 700
+     link hover  #ff8b4f  plus a 3px slide
+     legal       11.5px · 0.06em · uppercase
+     card        28px radius on the top corners only
+   ========================================================================== */
+
+.afi-footer {
+  background: #043353;
+  color: #b9cddd;
+  /* The rounded top is what makes it read as a card the page rests on
+     rather than a band bolted to the bottom. */
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+}
+
+/* Section headings ("Academia", "Research", …) — Raleway, not mono. The main
+   site sets these in its body face; mono here read as a different product. */
+.afi-footer .afi-footer-col h4 {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ff8b4f;
+}
+
+.afi-footer .afi-footer-section-h {
+  font-family: inherit;
+  letter-spacing: 0.18em;
+}
+
+.afi-footer .afi-footer-link {
+  color: #b9cddd;
+  transition:
+    color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.afi-footer .afi-footer-link:hover {
+  color: #ff8b4f;
+  /* The main site slides its footer links rather than underlining them. */
+  transform: translateX(3px);
+}
+
+.afi-footer .afi-footer-tagline {
+  color: #b9cddd;
+}
+
+.afi-footer .afi-footer-legal {
+  font-family: inherit;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .afi-footer .afi-footer-link {
+    transition: color 0.3s ease;
+  }
+  .afi-footer .afi-footer-link:hover {
+    transform: none;
+  }
+}
