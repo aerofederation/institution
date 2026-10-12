@@ -8,8 +8,10 @@ import { Reveal } from "@/components/motion";
    ──────────────────────────────────────────────────────────────
    Two halves:
 
-   1. the portal's own footer — the career and partner links a
-      visitor to this site actually needs, plus its support details
+   1. the institution platform's own footer — registration, sign-in
+      and the public pages that exist in this app, plus support details.
+      The career portal is a separate site; its candidate and partner
+      links do not belong here and led only to 404s when they were.
    2. the federation-wide footer carried over from the main site
       (aerofederation.org), so both sites end the same way
 
@@ -26,8 +28,13 @@ const MAIN = "https://www.aerofederation.org";
 
 const ORG = {
   legalName: "Aero Emerging Research & Ontology Federation of India",
+  /*
+   * Platform copy rather than the organisation's published tagline, which names
+   * aerospace, aeronautics and space. This platform is open to every department
+   * a member institution teaches, and that line would read as a limit.
+   */
   tagline:
-    "Unlocking the Potential of Aerospace, Aeronautics & Space Education Globally",
+    "One digital ecosystem for member institutions — academic structure, teaching, assessment and AI-assisted learning, across every department they teach.",
   darpanId: "DL/2025/0759007",
   established: 2024,
   support: "support@aerofederation.org",
@@ -50,33 +57,36 @@ const SOCIAL = [
 type FooterLinkSpec = { href: string; label: string; external?: boolean };
 type FooterColumn = { heading: string; links: FooterLinkSpec[] };
 
-/* ── This portal's own sections ───────────────────────────── */
+/* ── This platform's own sections ─────────────────────────── */
+/*
+ * Every internal href below is a route in this application — app/(public),
+ * /apply, /application-status, /login. Nothing points at the career portal.
+ */
 const PORTAL_COLUMNS: FooterColumn[] = [
   {
-    heading: "For candidates",
+    heading: "For institutions",
     links: [
-      { href: "/careers", label: "Browse open roles" },
-      { href: "/department", label: "Departments" },
-      { href: "/notices", label: "Notice board" },
-      { href: "/login", label: "Candidate sign in" },
-      { href: "/signup", label: "Create an account" },
-      { href: "/dashboard", label: "Track my application" },
+      { href: "/apply", label: "Register your institution" },
+      { href: "/application-status", label: "Track your application" },
+      { href: "/institutions", label: "Institution network" },
+      { href: "/login", label: "Administrator sign in" },
     ],
   },
   {
-    heading: "For partners",
+    heading: "For educators & students",
     links: [
-      { href: "/partner/register", label: "Become a partner" },
-      { href: "/partner/login", label: "Partner sign in" },
-      { href: "/partner/plans", label: "Subscription plans" },
-      { href: "/partner/verification-status", label: "Verification status" },
+      { href: "/login", label: "Portal sign in" },
+      { href: "/education", label: "What institutions teach" },
+      { href: "/ai-classroom", label: "AI Classroom" },
     ],
   },
   {
-    heading: "This portal",
+    heading: "This platform",
     links: [
       { href: "/about", label: "About the federation" },
-      { href: "/", label: "Portal home" },
+      { href: "/announcements", label: "Announcements" },
+      { href: "/events", label: "Events" },
+      { href: "/contact", label: "Contact" },
       {
         href: "https://verify.aerofederation.org",
         label: "Verify a credential",
@@ -115,14 +125,6 @@ const FEDERATION_COLUMNS: FooterColumn[] = [
         label: "Verify a Credential",
         external: true,
       },
-    ],
-  },
-  {
-    heading: "Careers",
-    links: [
-      { href: "/careers", label: "Careers Portal" },
-      { href: `${MAIN}/academia/atom`, label: "ATOM Programme" },
-      { href: `${MAIN}/copy-of-registrations`, label: "Apply", external: true },
     ],
   },
   {
@@ -176,7 +178,6 @@ const FEDERATION_COLUMNS: FooterColumn[] = [
     links: [
       { href: `${MAIN}/team`, label: "Overview" },
       { href: `${MAIN}/research`, label: "Researchers" },
-      { href: "/careers", label: "Join the Team" },
     ],
   },
   {
@@ -227,8 +228,8 @@ const POLICIES = [
 const ASSURANCES = [
   { label: "Encrypted document submission", icon: "shield" },
   { label: "Session-bound access control", icon: "lock" },
-  { label: "Verified partner network", icon: "check" },
-  { label: "Real-time application tracking", icon: "activity" },
+  { label: "HQ-verified institution network", icon: "check" },
+  { label: "Institution application tracking", icon: "activity" },
 ];
 
 const ICONS: Record<string, string> = {
@@ -346,14 +347,14 @@ export default function SiteFooter() {
           </div>
         </Reveal>
 
-        {/* ── This portal ──────────────────────────────────── */}
+        {/* ── This platform ────────────────────────────────── */}
         <Reveal as="section" className="afi-footer-section flex flex-col gap-6" delay={60}>
           <h2 className="afi-footer-section-h font-mono text-xs font-bold tracking-[0.2em] uppercase text-white">
-            CAREER PORTAL
+            INSTITUTION PLATFORM
           </h2>
           <FooterColumns
             columns={PORTAL_COLUMNS}
-            label="Career portal"
+            label="Institution platform"
             gridColsClass="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
           />
 
