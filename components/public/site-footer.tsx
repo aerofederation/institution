@@ -54,7 +54,8 @@ const SOCIAL = [
   { label: "Facebook", href: "https://www.facebook.com/aerofederation" },
 ];
 
-type FooterLinkSpec = { href: string; label: string; external?: boolean };
+/** A spec with no `href` is a category not yet published — rendered as plain text. */
+type FooterLinkSpec = { href?: string; label: string; external?: boolean };
 type FooterColumn = { heading: string; links: FooterLinkSpec[] };
 
 /* ── This platform's own sections ─────────────────────────── */
@@ -105,7 +106,33 @@ const PORTAL_COLUMNS: FooterColumn[] = [
 ];
 
 /* ── The federation-wide footer from the main site ────────── */
-const FEDERATION_COLUMNS: FooterColumn[] = [
+/* Declared in any order; FEDERATION_COLUMNS sorts the columns, and the links
+   inside each one, alphabetically — as the main site does. */
+const FEDERATION: FooterColumn[] = [
+  {
+    heading: "Careers",
+    links: [
+      {
+        href: "https://careers.aerofederation.org",
+        label: "Careers Portal",
+        external: true,
+      },
+      { href: `${MAIN}/academia/atom`, label: "ATOM Programme" },
+      {
+        href: `${MAIN}/copy-of-registrations`,
+        label: "Apply",
+        external: true,
+      },
+    ],
+  },
+  {
+    heading: "Downloads",
+    links: [{ label: "Android" }, { label: "iOS" }, { label: "macOS" }, { label: "Windows" }],
+  },
+  {
+    heading: "Exclusive",
+    links: [{ label: "Arcade" }, { label: "Celestial" }, { label: "e-Library" }],
+  },
   {
     heading: "Academia",
     links: [
@@ -201,7 +228,11 @@ const FEDERATION_COLUMNS: FooterColumn[] = [
         href: `${MAIN}/research/publications#case-studies`,
         label: "Case Studies",
       },
-      { href: `${MAIN}/research/publications`, label: "Publications" },
+      {
+        href: "https://journal.aerofederation.org",
+        label: "Publications",
+        external: true,
+      },
     ],
   },
   {
@@ -216,6 +247,14 @@ const FEDERATION_COLUMNS: FooterColumn[] = [
     ],
   },
 ];
+
+const byName = (a: string, b: string) =>
+  a.localeCompare(b, "en", { sensitivity: "base" });
+
+const FEDERATION_COLUMNS: FooterColumn[] = FEDERATION.map((column) => ({
+  ...column,
+  links: [...column.links].sort((a, b) => byName(a.label, b.label)),
+})).sort((a, b) => byName(a.heading, b.heading));
 
 const POLICIES = [
   { href: `${MAIN}/terms-and-conditions`, label: "Terms & Conditions" },
@@ -241,6 +280,14 @@ const ICONS: Record<string, string> = {
 
 /** Internal paths use Link; anything off-site (or mailto) uses a plain anchor. */
 function FooterLink({ href, label, external }: FooterLinkSpec) {
+  if (!href) {
+    return (
+      <span className="inline-block text-[14px] leading-[1.4] text-[#b9cddd]">
+        {label}
+      </span>
+    );
+  }
+
   const offSite = external || /^(https?:|mailto:)/.test(href);
 
   if (!offSite) {
@@ -391,7 +438,7 @@ export default function SiteFooter() {
           <FooterColumns
             columns={FEDERATION_COLUMNS}
             label="Federation"
-            gridColsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-10"
+            gridColsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-x-6 gap-y-10"
           />
         </Reveal>
 
